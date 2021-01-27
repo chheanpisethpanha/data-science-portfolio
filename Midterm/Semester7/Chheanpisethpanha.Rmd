@@ -1,0 +1,134 @@
+
+
+```{r}
+## 1
+A <- matrix(sample(1:100), nrow = 6, ncol = 6)
+A
+B <- matrix(sample(500:600), nrow = 6, ncol = 6)
+B
+
+#a. range of matrices A and B
+range(A)
+range(B)
+#b. max value from each row of A and B
+apply(A,1,max)
+apply(B,1,max)
+
+
+#c. diagonal value of A&B
+diag(A)
+diag(B)
+
+#d. A*B
+A*B
+
+#e. replace 4th row A
+A[4,] <- diag(B)
+A
+
+#f. multiply AB and store on X
+X <- A*B
+X
+```
+```{r}
+#g. A/B
+det(B)
+(BI <- inv(B))
+```
+
+
+
+```{r}
+## 2. Create Table
+fname <- c("Mark1", "Mark2", "Mark3", "Mark4", "Mark5", "Mark6", "Mark7", "Mark8", "Mark9", "Mark10")
+sname <- c("Lee")
+age <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+occu <- c("xyz1", "xyz2", "xyz3", "xyz4", "xyz5", "xyz6", "xyz7", "xyz8", "xyz9","xyz10")
+place <- c("abc1", "abc2", "abc3", "abc4", "abc5", "abc6", "abc7", "abc8", "abc9","abc10")
+
+table <- data.frame(Firstname = fname, SecondName = sname, Age = age, Occupation = occu, Place = place, RandomNumbers = sample(1:10) )
+
+lastCol <- table$RandomNumbers
+sum(lastCol)
+mean(lastCol)
+length(lastCol)
+```
+
+
+```{r}
+## 3. 
+#https://www.phnompenhpost.com/national/public-urged-adopt-healthier-habits
+library(tokenizers)
+
+#a
+myTxt <- read.delim("khnews.txt")
+
+#b
+wordsData <- paste0(myTxt)
+tokens <- tokenize_words(wordsData)
+count <- count_words(wordsData)
+print(count)
+
+#c
+mostWords <- names(table(tokens))[as.vector(table(tokens))==max(table(tokens))]
+mostWords_count <- max(table(tokens))
+subs <- gsub("to", "KIT", tokens)
+print(mostWords)
+print(mostWords_count)
+print(subs)
+#d
+library("syuzhet")
+library("ggplot2")
+sentimentAnalysis <- get_sentiment(tokens, method="syuzhet")
+
+summary(sentimentAnalysis)
+
+#e
+p <- ggplot(dataset, aes(x=count, y=wordsData)) + 
+    xlab("Number of words") +
+    ylab("List of words")
+p
+```
+
+4. Find the assigned Dataset from the list below and perform the following (20 Marks)
+```{r}
+# a. Import and Clean the dataset.
+library("tidyverse")
+dataset <- read_csv("D:/Z/Lessons/Semester VII/DS/mid/august_senate_polls.csv")
+dataset
+#is.na(dataset)
+# the dataset is cleaned up, there's no NA in the data.
+
+# b. Find the x and y variables(axis) from the assigned dataset, since the amount of Poll not equal to the result being used, choosing these 2 will help tell us the actual amount of poll
+
+plot <- ggplot(dataset, aes(x=DEM_poll, y=DEM_result)) + 
+    xlab("DEM poll") +
+    ylab("DEM result")
+
+# c. Plot the graph using geom_col() and perform the linear model in statistics.
+# using geom_col
+plot <- plot+geom_col()
+
+#perform linear model in smoothing
+plot <- plot+geom_smooth(method="lm")
+plot
+
+# d. Perform the facet with the available columns(Choose the any two variables from the columns)
+# use facet 2 variable by the cycle of poll and the DEM result
+plot+facet_grid(DEM_result~cycle)
+
+
+# e. Use the theme layer to do the following (Note: Based on dataset, name the x and y axis graph)
+#e.1. x-axis title =“________”, Size=10, Bold, Text in Green color, Center, space between graph and title = 20.
+#e.2. y-axis title =“________”, Size=10, Bold, Text in Yellow color, Center, space between graph and title = 20.
+#e.3. Graph title =”_________”,Size = 25, Bold, Center, Text in Blue color, space between graph and title = 25.
+plot <- plot +
+  ggtitle("August Senate (DEM) Used Poll Result") + theme(
+  axis.title.x=element_text(size=10, color="green", face="bold", margin=margin(t=20,r=20,b=0,l=0)),
+  axis.title.y=element_text(size=10, color="yellow", face="bold", margin=margin(t=0,r=20,b=0,l=20)),
+  plot.title=element_text(size=25, color="blue", face="bold", margin=margin(t=25,r=0,b=25,l=0))
+  )
+plot
+```
+
+
